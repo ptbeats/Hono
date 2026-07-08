@@ -1,0 +1,211 @@
+/* 设备列表最外层容器 */
+.device-list-container {
+  padding: var(--spacing-lg);
+  background: var(--bg-card);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.07);
+  margin: 2rem auto;
+  max-width: 1200px;
+}
+
+/* 列表头部：标题+总数 */
+.device-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.device-list-header h2 {
+  font-size: var(--font-size-2xl);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.device-count {
+  font-size: var(--font-size-md);
+  color: var(--text-secondary);
+  padding: 4px 12px;
+  background: rgba(24, 144, 255, 0.08);
+  border-radius: 16px;
+}
+
+/* 列表容器 */
+.device-list {
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+/* 空列表占位 */
+.device-list-empty {
+  text-align: center;
+  padding: var(--spacing-xl);
+  color: var(--text-secondary);
+  font-size: var(--font-size-lg);
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: var(--border-radius);
+}
+
+/* 单台设备卡片 */
+.device-item {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.22s ease;
+}
+
+.device-item:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.09);
+  transform: translateY(-2px);
+  border-color: rgba(24, 144, 255, 0.2);
+}
+
+/* 设备左侧信息区域 */
+.device-item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.device-item-name {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.device-item-id {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  font-family: 'Courier New', monospace;
+}
+
+.device-item-description {
+  font-size: var(--font-size-sm);
+  color: var(--text-light);
+}
+
+.device-item-tenant,
+.device-item-time {
+  font-size: var(--font-size-sm);
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 右侧操作区 */
+.device-item-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+/* 启用/禁用状态标签 */
+.device-status {
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.status-enabled {
+  background: linear-gradient(90deg, #e6f7ef, #d4edda);
+  color: #0f5132;
+  border: 1px solid #c3e6cb;
+}
+
+.status-disabled {
+  background: linear-gradient(90deg, #fff2f2, #f8d7da);
+  color: #842029;
+  border: 1px solid #f5c6cb;
+}
+
+/* 状态切换按钮 */
+.toggle-btn {
+  padding: 6px 14px;
+  border: none;
+  border-radius: var(--border-radius);
+  background: var(--secondary-color);
+  color: white;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  transition: all 0.22s ease;
+}
+
+.toggle-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(25, 118, 210, 0.2);
+}
+
+.toggle-btn:active {
+  transform: translateY(0);
+}
+
+/* 分页区域 */
+.device-list-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--border-color);
+}
+
+.pagination-btn {
+  padding: 6px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  background: var(--bg-primary);
+  cursor: pointer;
+  transition: all 0.22s ease;
+  font-size: var(--font-size-md);
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--secondary-color);
+  color: var(--secondary-color);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.pagination-info {
+  font-size: var(--font-size-md);
+  color: var(--text-secondary);
+  min-width: 120px;
+  text-align: center;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .device-list-container {
+    margin: 1rem;
+    padding: var(--spacing-md);
+  }
+  .device-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+  }
+  .device-list-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+}

@@ -1,0 +1,131 @@
+/* 命令下发表单外层卡片容器 */
+.command-sender {
+  padding: var(--spacing-lg);
+  max-width: 700px;
+  margin: 2rem auto;
+  background: var(--bg-card);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* 表单标题 */
+.form-title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* 主表单垂直布局 */
+.command-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* 双列表单行 */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+}
+
+/* 单个表单分组（标签+输入框） */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.form-group label {
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: var(--font-size-md);
+}
+
+/* 输入框辅助提示文字 */
+.form-tip {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+/* 所有输入控件通用样式 */
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-md);
+  transition: all 0.2s ease;
+  background-color: var(--bg-input);
+}
+
+/* 输入框悬浮效果 */
+.form-group input:hover,
+.form-group select:hover,
+.form-group textarea:hover {
+  border-color: var(--border-hover);
+}
+
+/* 输入框聚焦高亮 */
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--warning-color);
+  box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.15);
+}
+
+/* JSON载荷文本域 等宽代码字体 */
+.textarea-json {
+  font-family: 'Courier New', monospace;
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.5;
+}
+
+/* 提交按钮 */
+.submit-btn {
+  padding: var(--spacing-md);
+  background: var(--warning-color);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-lg);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* 按钮悬浮激活态 */
+.submit-btn:hover:not(:disabled) {
+  background: #e68900;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(255, 152, 0, 0.2);
+}
+
+.submit-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* 禁用按钮样式 */
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* 移动端适配：双列改为单列 */
+@media (max-width: 600px) {
+  .command-sender {
+    margin: 1rem;
+    padding: var(--spacing-md);
+  }
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
