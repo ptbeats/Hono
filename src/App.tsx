@@ -4,69 +4,51 @@ import Layout from './components/Layout';
 import DeviceRegister from './Pages/DeviceRegister';
 import CredentialManage from './Pages/CredentialManage';
 import CommandDispatch from './Pages/CommandDispatch';
-import { Device } from './data';
-import { getDevices, registerDevice, configureCredential, dispatchCommand } from './api';
+import { useDevices, useCredentials, useCommands } from './logic';
+import { Device } from './logic/api/types';
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState('device-register');
-  const [devices, setDevices] = useState<Device[]>([]);
-  const [total, setTotal] = useState(0);
-  const [currentPageNum, setCurrentPageNum] = useState(0);
-  const [loading, setLoading] = useState(false);
 
-  // 加载设备列表
-  const loadDevices = async (page: number = 0, size: number = 20) => {
-    setLoading(true);
-    try {
-      const res = await getDevices(page, size);
-      if (res.data.success) {
-        setDevices(res.data.data.devices);
-        setTotal(res.data.data.total);
-        setCurrentPageNum(page);
-      } else {
-        alert(res.data.message);
-      }
-    } catch (err: any) {
-      alert('加载设备列表失败：' + err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { 
+    devices, 
+    loading, 
+    error, 
+    fetchDevices, 
+    registerDevice
+  } = useDevices();
+
+  const { configureCredentials } = useCredentials();
+  const { sendCommand } = useCommands();
 
   useEffect(() => {
-    loadDevices(0, 20);
-  }, []);
+    fetchDevices({ page: 0, size: 20 });
+  }, []);  // 只在挂载时执行一次
 
-  // 注册设备
-  const addDevice = async (device: Omit<Device, 'createdAt'>) => {
+  // 1. 注册设备
+  const handleAddDevice = async (device: Omit<Device, 'createdAt'>) => {
     try {
-      const res = await registerDevice(device);
-      if (res.data.success) {
-        alert(res.data.message);
-        await loadDevices(0, 20);
-      } else {
-        alert(res.data.message);
-      }
+      await registerDevice(device);
+      alert('设备注册成功');
+      // 注册成功后刷新列表（回到第一页）
+      await fetchDevices({ page: 0, size: 20 });
     } catch (err: any) {
-      alert('注册失败：' + err.message);
+      // 错误已由 Hook 处理（存入 error 状态）
+      alert(err.message || '注册失败');
     }
   };
 
-  // 配置凭证
+  // 2. 配置凭证
   const handleConfigureCredential = async (deviceId: string, authId: string, password: string) => {
     try {
-      const res = await configureCredential(deviceId, authId, password);
-      if (res.data.success) {
-        alert(res.data.message);
-      } else {
-        alert(res.data.message);
-      }
+      await configureCredentials(deviceId, authId, password);
+      alert('凭证配置成功');
     } catch (err: any) {
-      alert('配置凭证失败：' + err.message);
+      alert(err.message || '配置凭证失败');
     }
   };
 
-  // 下发命令
+  // 3. 下发命令
   const handleDispatchCommand = async (
     deviceId: string,
     commandName: string,
@@ -74,27 +56,24 @@ const App: React.FC = () => {
     timeoutSeconds: number = 10
   ) => {
     try {
-      const res = await dispatchCommand(deviceId, commandName, payload, 'application/json', timeoutSeconds);
-      if (res.data.success) {
-        alert(`命令下发成功：${res.data.message}`);
-      } else {
-        alert(res.data.message);
-      }
+      await sendCommand(deviceId, { commandName, payload, timeoutSeconds });
+      alert('命令下发成功');
     } catch (err: any) {
-      alert('下发命令失败：' + err.message);
+      alert(err.message || '下发命令失败');
     }
   };
 
+  // ---------- 页面渲染 ----------
   const renderPage = () => {
     switch (currentPage) {
       case 'device-register':
-        return <DeviceRegister devices={devices} onAddDevice={addDevice} />;
+        return <DeviceRegister devices={devices} onAddDevice={handleAddDevice} />;
       case 'credential-manage':
         return <CredentialManage devices={devices} onConfigureCredential={handleConfigureCredential} />;
       case 'command-dispatch':
         return <CommandDispatch devices={devices} onDispatchCommand={handleDispatchCommand} />;
       default:
-        return <DeviceRegister devices={devices} onAddDevice={addDevice} />;
+        return <DeviceRegister devices={devices} onAddDevice={handleAddDevice} />;
     }
   };
 
