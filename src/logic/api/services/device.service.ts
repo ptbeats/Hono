@@ -1,9 +1,9 @@
 // src/api/services/device.service.ts
 import { BaseService } from './base.service';
 import {
-  DeviceRegistrationRequest,
+  DeviceRegistrationRequest,//注册
   DeviceListResponse,
-  DeviceQueryParams,
+  DeviceQueryParams,//参数
   DeviceRegistrationApiResponse,
   DeviceListApiResponse,
 } from '../types';

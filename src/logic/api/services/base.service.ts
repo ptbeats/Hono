@@ -1,15 +1,16 @@
 // base.service.ts
+//导入 api 对象
 import { api } from '../client';
 import { ApiResponse, ApiError, RequestConfig } from '../../api/types';
 
 export class BaseService {
-  protected async request<T = any>(
+  protected async request<T = any>(//默认泛型 T，async request 方法，返回 Promise<ApiResponse<T>> 
     method: 'get' | 'post' | 'put' | 'delete' | 'patch',
     url: string,
     data?: any,
     config?: RequestConfig
   ): Promise<ApiResponse<T>> {
-    try {
+    try {//提取请求配置
       const requestConfig = {
         timeout: config?.timeout,
         headers: {
@@ -17,7 +18,8 @@ export class BaseService {
         },
       };
 
-      let response;
+      let response;//返回结果
+      //HTTP方法处理
       switch (method) {
         case 'get':
           response = await api.get<T>(url, { ...requestConfig, params: data });
@@ -39,7 +41,7 @@ export class BaseService {
       }
       
       // 处理响应
-      const responseData = response && typeof response === 'object' && 'data' in response
+      const responseData = response && typeof response === 'object' && 'data' in response//判断 response 是否包含 data 属性，如果包含则使用 response.data，否则直接使用 response
         ? (response as any).data
         : response;
 
@@ -47,6 +49,7 @@ export class BaseService {
         if ('success' in responseData) {
           return responseData as ApiResponse<T>;
         }
+        // 如果响应数据没有 success 字段，则默认认为请求成功，返回一个标准的 ApiResponse 对象
         return {
           success: true,
           message: '请求成功',
@@ -68,7 +71,7 @@ export class BaseService {
       // 构建标准错误
       const apiError: ApiError = {
         success: false,
-        code: error?.code || 'UNKNOWN_ERROR',
+        code: error?.code || 'UNKNOWN_ERROR',//优先使用 error.code，如果没有则使用 'UNKNOWN_ERROR'
         message: error?.message || '请求失败，请稍后重试',
         status: error?.status,
         data: error?.data,
@@ -77,7 +80,7 @@ export class BaseService {
       throw apiError;
     }
   }
-
+//封装常用的 HTTP 方法，方便子类调用
   protected get<T = any>(url: string, params?: any, config?: RequestConfig): Promise<ApiResponse<T>> {
     return this.request<T>('get', url, params, config);
   }

@@ -1,27 +1,28 @@
 // client.ts
+//导入axios及其类型
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
-
+//定义api的基础URL和超时时间
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080/api';
 const API_TIMEOUT = parseInt(process.env.REACT_APP_API_TIMEOUT || '10000', 10);
-
+//创建一个axios实例
 export const apiClient: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
   timeout: API_TIMEOUT,
-  headers: {
+  headers: {//请求头部设置
     'Content-Type': 'application/json',
     'Accept': 'application/json',
   },
-  withCredentials: true,
+  withCredentials: true,//允许跨域请求携带cookie
 });
 
 // 请求拦截器
-apiClient.interceptors.request.use(
+apiClient.interceptors.request.use(//发送请求前修改
   (config) => {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('authToken');//获取本地存储中的token
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    return config;
+    return config;//存在token则在请求头中添加Authorization字段
   },
   (error) => {
     console.error('[Request Error]', error);
@@ -32,7 +33,7 @@ apiClient.interceptors.request.use(
 // 响应拦截器
 apiClient.interceptors.response.use(
   (response: AxiosResponse) => {
-    if (response.data && typeof response.data === 'object' && 'success' in response.data) {
+    if (response.data && typeof response.data === 'object' && 'success' in response.data) {//判断返回数据中是否包含success字段
       return response.data;
     }
     return { success: true, data: response.data };
@@ -50,10 +51,10 @@ apiClient.interceptors.response.use(
         baseURL: error.config?.baseURL,
       }
     });
-
+//提取HTTP状态码和响应数据
     const status = error.response?.status;
     const responseData = error.response?.data as any;
-    
+    //初始化错误信息和错误码
     let errorMessage = '请求失败，请稍后重试';
     let errorCode = 'UNKNOWN_ERROR';
 
@@ -126,7 +127,7 @@ apiClient.interceptors.response.use(
     return Promise.reject(apiError);
   }
 );
-
+//导出一个api对象，包含get、post、put、delete和patch方法，方便在项目中调用
 export const api = {
   get: <T = any>(url: string, config?: AxiosRequestConfig) => apiClient.get<T>(url, config),
   post: <T = any>(url: string, data?: any, config?: AxiosRequestConfig) => apiClient.post<T>(url, data, config),

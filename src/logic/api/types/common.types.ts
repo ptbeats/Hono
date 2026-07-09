@@ -6,7 +6,7 @@ export interface ApiResponse<T = any> {
   error?: string;
   timestamp?: string;
 }
-
+//错误类型
 export interface ApiError {
   success: false;
   code: string;
@@ -14,12 +14,12 @@ export interface ApiError {
   status?: number;
   data?: any;
 }
-
+//分页
 export interface PaginationParams {
   page?: number;
   size?: number;
 }
-
+//请求
 export interface RequestConfig {
   timeout?: number;
   showLoading?: boolean;
